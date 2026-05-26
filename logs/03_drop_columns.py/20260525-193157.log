@@ -1,0 +1,4 @@
+[2026/05/25-19:31:57] [INFO] ==================== DROP COLUMNS ====================
+[2026/05/25-19:31:57] [INFO] Starting with SF report 69 columns
+[2026/05/25-19:31:57] [INFO] Dropped 45, left with 47 columns
+[2026/05/25-19:31:57] [INFO] Start dropping columns from purchase order invoices ['mvt', 'sh_text', 'trans_event_type']

@@ -1,0 +1,20 @@
+[2026/05/26-17:01:56] [INFO] ==================== CONVERT PROCESSED INTO OUTPUT ====================
+[2026/05/26-17:01:56] [INFO] Last processed step: /home/jorge/Documents/GitHub/TFM/data/processed/06_separate_X_y/sales_orders
+[2026/05/26-17:01:56] [WARN] No invoices with clearing found for 311367186
+[2026/05/26-17:01:56] [WARN] No invoices with clearing found for 311335423
+[2026/05/26-17:01:56] [WARN] No invoices with clearing found for 311370001
+[2026/05/26-17:01:57] [WARN] No invoices with clearing found for 4 different SAP
+[2026/05/26-17:01:57] [WARN] No invoices with clearing found for 311369154
+[2026/05/26-17:01:57] [WARN] No invoices with clearing found for 311369166
+[2026/05/26-17:01:57] [WARN] No invoices with clearing found for 311353000
+[2026/05/26-17:01:57] [WARN] No invoices with clearing found for 311364382
+[2026/05/26-17:01:58] [WARN] No invoices with clearing found for 311368466
+[2026/05/26-17:01:58] [WARN] No invoices with clearing found for 311352513
+[2026/05/26-17:01:58] [WARN] No invoices with clearing found for 311342799
+[2026/05/26-17:01:58] [WARN] No invoices with clearing found for 311369466
+[2026/05/26-17:01:58] [WARN] No invoices with clearing found for 311369277
+[2026/05/26-17:01:58] [WARN] No invoices with clearing found for 311351126
+[2026/05/26-17:01:58] [INFO] Final output:
+[2026/05/26-17:01:58] [INFO] Total sales orders: 320
+[2026/05/26-17:01:58] [INFO] Total invoices: 1348
+[2026/05/26-17:01:58] [INFO] Total invoices w/ clearing: 1012 (75.07418397626114%)
