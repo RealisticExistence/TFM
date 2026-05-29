@@ -30,7 +30,7 @@ for sales_order_dir in PROCESSED_MERGE_INVOICES_SALES_ORDERS_DIR.iterdir():
         copy_file(sales_order_dir / "clearing_invoices.csv", sales_order_new_dir / "clearing_invoices.csv")
 
         so_id = sales_order_dir.name.replace("so-", "")
-        so_info = pd.read_csv(sales_order_dir / "so_info.csv", usecols=so_info_columns)
+        so_info = pd.read_csv(sales_order_dir / "so_info.csv", usecols=so_info_columns, dtype={"terms_of_payment": str, "so_date": str, "req_deliv_date": str})
         sf_report_row = sf_report[sf_report["sap_so_num"] == so_id]
         final_so_info = pd.concat([so_info.reset_index(drop=True), sf_report_row.reset_index(drop=True)], axis=1)
         final_so_info.to_csv(sales_order_new_dir / "input.csv", index=False)

@@ -1,7 +1,10 @@
+import math
 import re
 import time
 from collections.abc import Callable
+from typing import Dict
 
+import numpy as np
 import pandas as pd
 from pathlib import Path
 import shutil
@@ -137,3 +140,34 @@ def parse_monetary_amount(string: str) -> float:
 def file_not_empty(path: Path) -> bool:
     if not path.exists(): return False
     return len(path.read_text(encoding="utf-8").strip()) > 0
+
+def expand_date_with_cyclics(column: str, df: pd.DataFrame, day_dict=None, sep=".") -> None:
+    if day_dict is None: day_dict = [1, 2, 3]
+    def day_extract(date_string):
+        match = re.search(r"(\d{1,2})"+sep+r"(\d{1,2})"+sep+r"(\d{2,4})", str(date_string))
+        if match is None: return None
+        return int(match.group(day_dict[0]))
+    def month_extract(date_string):
+        match = re.search(r"(\d{1,2})"+sep+r"(\d{1,2})"+sep+r"(\d{2,4})", str(date_string))
+        if match is None: return None
+        return int(match.group(day_dict[1]))
+    def year_extract(date_string):
+        match = re.search(r"(\d{1,2})"+sep+r"(\d{1,2})"+sep+r"(\d{2,4})", str(date_string))
+        if match is None: return None
+        return int(match.group(day_dict[2]))
+
+    df[f"{column}_day"] = pd.to_numeric(df[column].apply(day_extract), errors="coerce")
+    df[f"{column}_month"] = pd.to_numeric(df[column].apply(month_extract))
+    df[f"{column}_year"] = pd.to_numeric(df[column].apply(year_extract))
+
+    df[f"{column}_day_sin"] = np.sin(df[f"{column}_day"]/31*2*math.pi)
+    df[f"{column}_day_cos"] = np.cos(df[f"{column}_day"]/31*2*math.pi)
+    df[f"{column}_month_sin"] = np.sin(df[f"{column}_month"]/13*2*math.pi)
+    df[f"{column}_month_cos"] = np.cos(df[f"{column}_month"]/13*2*math.pi)
+
+def parse_net_value(string: str) -> float:
+    index_EUR = string.find("EUR")
+    currencyless_val = string[:index_EUR]
+    clean_currencyless = currencyless_val.replace("_", ".").strip()
+    if not "." in clean_currencyless: clean_currencyless = clean_currencyless[:-3] + "." + clean_currencyless[-2:]
+    return clean_currencyless
