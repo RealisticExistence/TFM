@@ -10,7 +10,7 @@ last_processed_step_dir = sorted([path for path in PROCESSED_DIR.iterdir()], key
 
 log(f"Last processed step: {last_processed_step_dir.resolve()}")
 
-create_dir(OUTPUT_DIR)
+create_dir(DATA_CLEANING_OUTPUT_DIR)
 
 output_df = pd.DataFrame()
 output_clearing_df = pd.DataFrame()
@@ -44,6 +44,7 @@ for sales_order_dir in last_processed_step_dir.iterdir():
 
         if file_not_empty(clearing_invoices_file):
             clearing_invoices = pd.read_csv(clearing_invoices_file)
+            clearing_invoices["sales_order_id"] = so_id
             output_clearing_df = pd.concat([output_clearing_df, clearing_invoices], ignore_index=True)
             input_clearing_df = pd.concat([input_clearing_df, input_data], ignore_index=True)
             if len(clearing_invoices.index) == len(invoices.index):
@@ -58,16 +59,20 @@ for sales_order_dir in last_processed_step_dir.iterdir():
 sales_orders = input_df["sales_order_id"].tolist()
 sales_complete_orders = complete_input_clearing_df["sales_order_id"].tolist()
 
-complete_output_clearing_df.to_csv(OUTPUT_DIR / "complete_output_clearing.csv", index=False)
-complete_input_clearing_df.to_csv(OUTPUT_DIR / "complete_input_clearing.csv", index=False)
+create_dir(DATA_CLEANING_OUTPUT_COMPLETE_DIR)
+create_dir(DATA_CLEANING_OUTPUT_CLEARING_DIR)
+create_dir(DATA_CLEANING_OUTPUT_FULL_DIR)
 
-output_clearing_df.to_csv(OUTPUT_DIR / "output_clearing.csv", index=False)
-input_clearing_df.to_csv(OUTPUT_DIR / "input_clearing.csv", index=False)
+complete_output_clearing_df.to_csv(DATA_CLEANING_OUTPUT_COMPLETE_DIR / "complete_output_clearing.csv", index=False)
+complete_input_clearing_df.to_csv(DATA_CLEANING_OUTPUT_COMPLETE_DIR / "complete_input_clearing.csv", index=False)
 
-output_df.to_csv(OUTPUT_DIR / "output.csv", index=False)
-input_df.to_csv(OUTPUT_DIR / "input.csv", index=False)
+output_clearing_df.to_csv(DATA_CLEANING_OUTPUT_CLEARING_DIR / "output_clearing.csv", index=False)
+input_clearing_df.to_csv(DATA_CLEANING_OUTPUT_CLEARING_DIR / "input_clearing.csv", index=False)
 
-log(f"Final output:")
+output_df.to_csv(DATA_CLEANING_OUTPUT_FULL_DIR / "output.csv", index=False)
+input_df.to_csv(DATA_CLEANING_OUTPUT_FULL_DIR / "input.csv", index=False)
+
+log(f"Final data_cleaning_output:")
 log(f"Total sales orders: {len(sales_orders)}")
 log(f"Total complete sales orders: {len(sales_complete_orders)} ({len(sales_complete_orders)/len(sales_orders)*100}%)")
 log(f"Total invoices: {len(output_df.index)}")

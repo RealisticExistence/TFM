@@ -8,7 +8,7 @@ import pandas as pd
 
 log("="*20 + " CLEAN COLUMNS " + "="*20)
 
-df = pd.read_csv(OUTPUT_DIR / "input.csv", dtype={"terms_of_payment": str})
+df = pd.read_csv(DATA_CLEANING_OUTPUT_DIR / "input.csv", dtype={"terms_of_payment": str})
 
 create_dir(PROCESSED_CLEAN_COLUMNS_SALES_ORDERS_DIR)
 
@@ -34,8 +34,6 @@ for sales_order_dir in PROCESSED_SEPARATE_X_Y_SALES_ORDERS_DIR.iterdir():
         expand_date_with_cyclics("so_date", input_data)
         expand_date_with_cyclics("req_deliv_date", input_data)
         expand_date_with_cyclics("close_date", input_data, day_dict=[2, 1, 3])
-        expand_date_with_cyclics("bid_submission_date", input_data, day_dict=[2, 1, 3])
-        expand_date_with_cyclics("bid_validity", input_data, day_dict=[2, 1, 3])
         expand_date_with_cyclics("created_date", input_data, day_dict=[2, 1, 3])
         input_data = input_data.drop("Unnamed: 0", axis=1, errors="ignore")
 

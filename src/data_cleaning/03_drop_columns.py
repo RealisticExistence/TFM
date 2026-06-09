@@ -6,7 +6,7 @@ log("="*20 + " DROP COLUMNS " + "="*20)
 
 sf_report = pd.read_csv(PROCESSED_NO_EMPTY_SF_REPORT)
 
-drop_cols = pd.read_csv(PROCESSED_DROP_COLS_LIST)["drop_cols"].tolist() + ["booking_are", "awarded_to_epc", "user_country", "ifa_number", "opportunity_id"]
+drop_cols = pd.read_csv(PROCESSED_DROP_COLS_LIST)["drop_cols"].tolist() + ["booking_are", "awarded_to_epc", "user_country", "ifa_number", "opportunity_id", "bid_submission_date", "bid_validity"]
 
 initial_cols = len(sf_report.columns)
 

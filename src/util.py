@@ -10,7 +10,8 @@ from pathlib import Path
 import shutil
 import __main__
 from enum import Enum
-from config import LOG_DIR
+from config import LOG_DIR, DATA_CLEANING_OUTPUT_COMPLETE_FOLDER, DATA_CLEANING_OUTPUT_CLEARING_FOLDER, \
+    DATA_CLEANING_OUTPUT_FULL_FOLDER
 from termcolor import colored
 
 class LogLevel(Enum):
@@ -171,3 +172,26 @@ def parse_net_value(string: str) -> float:
     clean_currencyless = currencyless_val.replace("_", ".").strip()
     if not "." in clean_currencyless: clean_currencyless = clean_currencyless[:-3] + "." + clean_currencyless[-2:]
     return clean_currencyless
+
+def run_func_on_outputs(parent_dir: Path, output_dir: Path, func: Callable[[pd.DataFrame, pd.DataFrame, str], tuple[pd.DataFrame, pd.DataFrame]]):
+    complete_input_clearing = pd.read_csv(parent_dir / DATA_CLEANING_OUTPUT_COMPLETE_FOLDER / "complete_input_clearing.csv")
+    complete_output_clearing = pd.read_csv(parent_dir / DATA_CLEANING_OUTPUT_COMPLETE_FOLDER / "complete_output_clearing.csv")
+    input_clearing = pd.read_csv(parent_dir / DATA_CLEANING_OUTPUT_CLEARING_FOLDER / "input_clearing.csv")
+    output_clearing = pd.read_csv(parent_dir / DATA_CLEANING_OUTPUT_CLEARING_FOLDER / "output_clearing.csv")
+    input = pd.read_csv(parent_dir / DATA_CLEANING_OUTPUT_FULL_FOLDER / "input.csv")
+    output = pd.read_csv(parent_dir / DATA_CLEANING_OUTPUT_FULL_FOLDER / "output.csv")
+
+    complete_input_clearing, complete_output_clearing = func(complete_input_clearing, complete_output_clearing, "complete")
+    input_clearing, output_clearing = func(input_clearing, output_clearing, "clearing")
+    input, output = func(input, output, "full")
+
+    create_dir(output_dir / DATA_CLEANING_OUTPUT_COMPLETE_FOLDER)
+    create_dir(output_dir / DATA_CLEANING_OUTPUT_CLEARING_FOLDER)
+    create_dir(output_dir / DATA_CLEANING_OUTPUT_FULL_FOLDER)
+
+    complete_input_clearing.to_csv(output_dir / DATA_CLEANING_OUTPUT_COMPLETE_FOLDER / "complete_input_clearing.csv", index=False)
+    complete_output_clearing.to_csv(output_dir / DATA_CLEANING_OUTPUT_COMPLETE_FOLDER / "complete_output_clearing.csv", index=False)
+    input_clearing.to_csv(output_dir / DATA_CLEANING_OUTPUT_CLEARING_FOLDER / "input_clearing.csv", index=False)
+    output_clearing.to_csv(output_dir / DATA_CLEANING_OUTPUT_CLEARING_FOLDER / "output_clearing.csv", index=False)
+    input.to_csv(output_dir / DATA_CLEANING_OUTPUT_FULL_FOLDER / "input.csv", index=False)
+    output.to_csv(output_dir / DATA_CLEANING_OUTPUT_FULL_FOLDER / "output.csv", index=False)
