@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from config import *
 from util import copy_file, copy_dir, log, warn, parse_date
 import pandas as pd
@@ -40,30 +42,46 @@ for sales_order_dir in PROCESSED_PARSE_DATE_SALES_ORDERS_DIR.iterdir():
                     if po_invoice.is_file():
                         po_invoice_info = pd.read_csv(po_invoice)
                         total_po_invoice_count += 1
+                        if po_invoice_info.empty:
+                            missing_clearing_po_invoice_count += 1
+                            warn(f"PO data {po_invoice.resolve()} is empty")
+                            continue
                         if not "clearing_date" in po_invoice_info.columns:
                             missing_clearing_po_invoice_count += 1
                             warn(f"PO data {po_invoice.resolve()} doesnt have clearing date")
                             continue
-                        po_invoice_info["clearing_date"].apply(parse_date)
+                        po_invoice_info["clearing_date"] = po_invoice_info["clearing_date"].apply(parse_date)
                         if po_invoice_info["clearing_date"].any() == "":
                             warn(f"PO data {po_invoice.resolve()} doesnt have clearing date")
                             missing_clearing_po_invoice_count += 1
+                        elif datetime.strptime(po_invoice_info["clearing_date"].tolist()[0],"%d.%m.%Y") < datetime.strptime(po_invoice_info["document_date"].tolist()[0],"%d.%m.%Y"):
+                            warn(f"PO data {po_invoice.resolve()} has an invalid clearing date")
+                            missing_clearing_po_invoice_count += 1
+                            po_invoice_info["clearing_date"] = None
                         po_invoice_info.to_csv(po_invoice)
 
         for sales_invoice in (sales_order_dir / "sales_invoices").iterdir():
             if sales_invoice.is_file():
                 sales_invoice_info = pd.read_csv(sales_invoice)
                 total_sales_invoice_count += 1
+                if sales_invoice_info.empty:
+                    missing_clearing_sales_invoice_count += 1
+                    warn(f"Sales invoice {sales_invoice.resolve()} is empty")
+                    continue
                 if not "clearing_date" in sales_invoice_info.columns:
                     missing_clearing_sales_invoice_count += 1
                     warn(f"Sales invoice {sales_invoice.resolve()} doesnt have clearing date")
                     continue
-                sales_invoice_info["clearing_date"].apply(parse_date)
+                sales_invoice_info["clearing_date"] = sales_invoice_info["clearing_date"].apply(parse_date)
 
                 if sales_invoice_info["clearing_date"].any() == "":
                     warn(f"Sales invoice {sales_invoice.resolve()} doesnt have clearing date")
                     missing_clearing_sales_invoice_count += 1
-
+                elif datetime.strptime(sales_invoice_info["clearing_date"].tolist()[0], "%d.%m.%Y") < datetime.strptime(
+                        sales_invoice_info["on"].tolist()[0], "%d.%m.%Y"):
+                    warn(f"Sales invoice {sales_invoice.resolve()} has an invalid clearing date")
+                    missing_clearing_sales_invoice_count += 1
+                    sales_invoice_info["clearing_date"] = None
                 sales_invoice_info.to_csv(sales_invoice)
 
 

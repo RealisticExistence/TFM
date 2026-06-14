@@ -1,0 +1,4 @@
+[2026/06/11-09:52:33] [INFO] ==================== CLEARING DATE FORECASTER MODEL COMPARISON ====================
+[2026/06/11-09:52:39] [INFO] Model comparison written to: /home/jorge/Documents/GitHub/TFM/data/model_outputs/clearing_date_forecaster/clearing_date_model_comparison.csv
+[2026/06/11-09:52:39] [INFO] Selected model: soft_two_stage_gb_fast_classifier_extra_trees_log (rmse=21.1283)
+[2026/06/11-09:52:39] [INFO] Completed full output written to: /home/jorge/Documents/GitHub/TFM/data/model_outputs/clearing_date_forecaster/full_dataset/output.csv

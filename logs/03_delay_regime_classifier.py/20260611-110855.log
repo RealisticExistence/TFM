@@ -1,0 +1,4 @@
+[2026/06/11-11:08:55] [INFO] ==================== DELAY REGIME CLASSIFIER ====================
+[2026/06/11-11:09:07] [INFO] Best single model: extra_trees_flexible_log_target
+[2026/06/11-11:09:07] [INFO] Selected final model: tempered_soft_three_regime_classifier_extra_trees_log_T0.5
+[2026/06/11-11:09:07] [INFO] Final output written to: /home/jorge/Documents/GitHub/TFM/data/model_outputs/clearing_date_forecaster/full_dataset/output.csv

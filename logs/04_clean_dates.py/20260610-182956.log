@@ -1,0 +1,4 @@
+[2026/06/10-18:29:56] [INFO] ==================== CLEAN DATES ====================
+[2026/06/10-18:29:56] [INFO] Searching invalid dates coming from OCR (i.e. so_info/so_date, so_info/req_deliv_date and both clearing dates)
+[2026/06/10-18:29:56] [WARN] PO data /home/jorge/Documents/GitHub/TFM/data/processed/04_parse_dates/sales_orders/so-311346902/purchase_orders/4517445961/1-raw.csv doesnt have clearing date
+[2026/06/10-18:29:56] [WARN] PO data /home/jorge/Documents/GitHub/TFM/data/processed/04_parse_dates/sales_orders/so-311346902/purchase_orders/4517445961/2-raw.csv doesnt have clearing date

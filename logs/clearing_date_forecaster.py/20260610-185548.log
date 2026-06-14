@@ -1,0 +1,4 @@
+[2026/06/10-18:55:48] [INFO] ==================== CLEARING DATE FORECASTER MODEL COMPARISON ====================
+[2026/06/10-18:56:00] [INFO] Model comparison written to: /home/jorge/Documents/GitHub/TFM/data/model_outputs/clearing_date_forecaster/clearing_date_model_comparison.csv
+[2026/06/10-18:56:00] [INFO] Selected model: extra_trees_flexible_log_target (rmse=23.7057)
+[2026/06/10-18:56:00] [INFO] Completed full output written to: /home/jorge/Documents/GitHub/TFM/data/model_outputs/clearing_date_forecaster/full_dataset/output.csv

@@ -12,7 +12,11 @@ import __main__
 from enum import Enum
 from config import LOG_DIR, DATA_CLEANING_OUTPUT_COMPLETE_FOLDER, DATA_CLEANING_OUTPUT_CLEARING_FOLDER, \
     DATA_CLEANING_OUTPUT_FULL_FOLDER
-from termcolor import colored
+try:
+    from termcolor import colored
+except ImportError:
+    def colored(text, *_args, **_kwargs):
+        return text
 
 class LogLevel(Enum):
     INFO = 1

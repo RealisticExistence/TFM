@@ -1,0 +1,4 @@
+[2026/06/10-18:03:12] [INFO] ==================== CONVERT FEATURE ENGINEERING INTO OUTPUT ====================
+[2026/06/10-18:03:12] [INFO] Latest feature-engineering step: /home/jorge/Documents/GitHub/TFM/data/feature_engineering/05_historical_aggregates
+[2026/06/10-18:03:12] [INFO] Feature-engineering output written to: /home/jorge/Documents/GitHub/TFM/data/feature_engineering_output
+[2026/06/10-18:03:12] [INFO] Copied CSV files: 6

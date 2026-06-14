@@ -1,0 +1,4 @@
+[2026/06/11-13:39:49] [INFO] ==================== CLEARING DATE SINGLE MODELS ====================
+[2026/06/11-13:39:51] [INFO] Best single model: extra_trees_flexible_log_target
+[2026/06/11-13:39:51] [INFO] Validation RMSE: 22.5072; MAE: 15.7122; median AE: 9.0598
+[2026/06/11-13:39:51] [INFO] Single-model outputs written to: /home/jorge/Documents/GitHub/TFM/data/model_outputs/clearing_date_forecaster/01_single_models

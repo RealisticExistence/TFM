@@ -3,6 +3,7 @@ from math import isnan
 from config import *
 from util import copy_file, log, create_dir
 import pandas as pd
+import re
 
 log("="*20 + " SEPARATE X AND Y " + "="*20)
 
@@ -32,7 +33,14 @@ for sales_order_dir in PROCESSED_MERGE_INVOICES_SALES_ORDERS_DIR.iterdir():
         so_id = sales_order_dir.name.replace("so-", "")
         so_info = pd.read_csv(sales_order_dir / "so_info.csv", usecols=so_info_columns, dtype={"terms_of_payment": str, "so_date": str, "req_deliv_date": str})
         sf_report_row = sf_report[sf_report["sap_so_num"] == so_id]
+        for i, row in so_info.iterrows():
+            net_value_re = re.search(r"([\d.]*)(?: )*(?:EUR)", str(row["net_value"]))
+            if net_value_re:
+                so_info.loc[i, "net_value"] = net_value_re.groups()[0]
+
+
         final_so_info = pd.concat([so_info.reset_index(drop=True), sf_report_row.reset_index(drop=True)], axis=1)
         final_so_info.to_csv(sales_order_new_dir / "input.csv", index=False)
+        print(final_so_info["net_value"])
 
 log("SF Report integrated with SAP SO data")

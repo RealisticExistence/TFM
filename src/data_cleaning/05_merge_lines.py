@@ -4,6 +4,7 @@ from config import *
 from config import PROCESSED_MERGE_INVOICES_SALES_ORDERS_DIR
 from util import copy_file, parse_monetary_amount, log, warn, parse_date, create_dir
 import pandas as pd
+import re
 
 log("="*20 + " MERGE INVOICES " + "="*20)
 
@@ -41,7 +42,7 @@ for sales_order_dir in PROCESSED_PARSE_DATE_SALES_ORDERS_DIR.iterdir():
 
                             invoices[mat_doc]["amount"] += amount
 
-                            if po_item_row["document_date"] == "": continue
+                            if po_item_row["document_date"] == "" or po_item_row["document_date"] is None: continue
 
                             if invoices[mat_doc]["invoice_date"] is None:
                                 invoices[mat_doc]["invoice_date"] = po_item_row["document_date"]
@@ -53,10 +54,10 @@ for sales_order_dir in PROCESSED_PARSE_DATE_SALES_ORDERS_DIR.iterdir():
                                     invoices[mat_doc]["clearing_date"] = po_item_row["clearing_date"]
                                 elif invoices[mat_doc]["clearing_date"] != po_item_row["clearing_date"]:
                                     warn(f"Clearing date mismatch for material document {mat_doc}")
-                            else: invoices[mat_doc]["clearing_date"] = ""
 
-                            if invoices[mat_doc]["clearing_date"] != "":
-                                invoices_clearings[mat_doc] = invoices[mat_doc]
+                            if invoices[mat_doc]["clearing_date"] is not None:
+                                if re.search(r"\d{2}\.\d{2}\.\d{4}", str(invoices[mat_doc]["clearing_date"])) is not None:
+                                    invoices_clearings[mat_doc] = invoices[mat_doc]
 
         for sales_invoice in (sales_order_dir / "sales_invoices").iterdir():
             if sales_invoice.is_file():
@@ -72,7 +73,7 @@ for sales_order_dir in PROCESSED_PARSE_DATE_SALES_ORDERS_DIR.iterdir():
 
                     invoices[doc_num]["amount"] += amount
 
-                    if so_item_row["on"] == "": continue
+                    if so_item_row["on"] == "" or so_item_row["on"] is None: continue
 
                     if invoices[doc_num]["invoice_date"] is None:
                         invoices[doc_num]["invoice_date"] = so_item_row["on"]
@@ -84,11 +85,10 @@ for sales_order_dir in PROCESSED_PARSE_DATE_SALES_ORDERS_DIR.iterdir():
                             invoices[doc_num]["clearing_date"] = so_item_row["clearing_date"]
                         elif invoices[doc_num]["clearing_date"] != so_item_row["clearing_date"]:
                             warn(f"Clearing date mismatch for material document {doc_num}")
-                    else:
-                        invoices[doc_num]["clearing_date"] = ""
 
-                    if invoices[doc_num]["clearing_date"] != "":
-                        invoices_clearings[doc_num] = invoices[doc_num]
+                    if invoices[doc_num]["clearing_date"] is not None:
+                        if re.search(r"\d{2}\.\d{2}\.\d{4}", str(invoices[doc_num]["clearing_date"])) is not None:
+                            invoices_clearings[doc_num] = invoices[doc_num]
 
 
         pd.DataFrame(invoices.values()).to_csv(sales_order_new_dir / "invoices.csv", index=False)
